@@ -1,0 +1,70 @@
+FEITO POR: ANA JÚLIA ALEXANDRE E LUISA RODRIGUES CUNHA
+
+
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class Main {
+
+    private static final String[] PALAVRAS = {
+      "abacaxi", "bola", "carro", "dado", "elefante",
+      "foca", "gato", "hipopotamo", "iguana", "jacare",
+      "kiwi", "leão", "macaco", "navio", "palito",
+      "pato", "quadro", "rato", "sapo", "tigre",
+      "urso", "vaca", "wolverine", "amor", "paz",
+      "zebra", "andarilho"
+    };
+    private static final int MAX_TENTATIVAS = 6;
+
+    public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    Random random = new Random();
+    boolean jogarNovamente;
+    do {
+      String palavraSecreta = PALAVRAS[random.nextInt(PALAVRAS.length)];
+      String palavraOculta = palavraSecreta.replaceAll(".", "_");
+      int tentativasRestantes = MAX_TENTATIVAS;
+      boolean palavraRevelada = false;
+
+      while (tentativasRestantes > 0 && !palavraRevelada) {
+          System.out.println("Palavra: " + palavraOculta);
+          System.out.println("Tentativas restantes: " + tentativasRestantes);
+          System.out.print("Adivinhe uma letra: ");
+          String tentativa = scanner.nextLine().toLowerCase();
+
+          if (tentativa.length() != 1 || !Character.isLetter(tentativa.charAt(0))) {
+              System.out.println("Entrada inválida. Por favor, insira uma única letra.");
+              continue;
+          }
+
+          char letraTentativa = tentativa.charAt(0);
+          if (palavraSecreta.indexOf(letraTentativa) >= 0) {
+              // Revelar apenas a primeira ocorrência da letra na palavra oculta
+              int indice = palavraSecreta.indexOf(letraTentativa);
+              StringBuilder novaPalavraOculta = new StringBuilder(palavraOculta);
+              novaPalavraOculta.setCharAt(indice, letraTentativa);
+              palavraOculta = novaPalavraOculta.toString();
+              palavraRevelada = !palavraOculta.contains("_");
+          } else {
+              tentativasRestantes--;
+              System.out.println("Letra não encontrada.");
+          }
+      }
+
+      if (palavraRevelada) {
+          System.out.println("Parabéns! Você adivinhou a palavra: " + palavraSecreta);
+      } else {
+          System.out.println("Você perdeu! A palavra era: " + palavraSecreta);
+      }
+
+      System.out.print("Deseja jogar novamente? (s/n): ");
+      jogarNovamente = scanner.nextLine().equalsIgnoreCase("s");
+
+    } while (jogarNovamente);
+
+    scanner.close();
+    System.out.println("Obrigado por jogar!");
+    }
+
+}
